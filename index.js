@@ -7,7 +7,10 @@ const flash = require('express-flash')
 const app = express()
 
 const conn = require('./db/conn')
-const exp = require('constants')
+
+// Models
+const Tought = require('./models/Tought')
+const User = require('./models/User')
 
 // template engine
 app.engine('handlebars', exphbs.engine())
@@ -50,7 +53,7 @@ app.use(express.static('public'))
 
 // set session to res
 app.use((req,res,next) => {
-    
+
     if(req.res.userid) {
         res.locals.session = req.session
     }
