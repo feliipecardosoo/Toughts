@@ -3,9 +3,31 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 
 module.exports = class AuthController {
-
+    
     static login(req,res) {
         res.render('auth/login')
+    }
+    static async loginPost (req,res) {
+        const {email, password} = req.body
+
+        const user = await User.findOne({where: {email: email}})
+        const passwordMatch = bcrypt.compareSync(password, user.password)
+
+        if (!user || !passwordMatch) {
+            req.flash('message', 'E-mail ou senha Invalida!.')
+            res.render('auth/login')
+            return
+        }       
+        // initialize session
+
+        req.session.userid = user.id
+
+        req.flash('message', 'Logado relizado!')
+
+        req.session.save(() => {
+        res.redirect('/')
+        })
+
     }
     static register(req,res) {
         res.render('auth/register')
