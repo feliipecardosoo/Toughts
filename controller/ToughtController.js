@@ -1,12 +1,29 @@
 const Tought = require('../models/Tought')
 const User = require('../models/User') 
+const { use } = require('../routes/authRoutes')
 
 module.exports = class ToughtController {
     static async showToughts(req,res) {
         res.render('toughts/home')
     }
     static async dashboard (req,res) {
-        res.render('toughts/dashboard')
+        const userId = req.session.userid
+
+        const user = await User.findOne({
+            where: {
+                id: userId,
+            },
+            include: Tought,
+            plain: true
+        })
+
+        if (!user) {
+            res.redirect('/login')
+        }
+
+        const toughts = user.Toughts.map((result) => result.dataValues)
+
+        res.render('toughts/dashboard', {toughts})
     }
     static createTought (req,res) {
         res.render('toughts/create')
