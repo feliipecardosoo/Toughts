@@ -23,7 +23,13 @@ module.exports = class ToughtController {
 
         const toughts = user.Toughts.map((result) => result.dataValues)
 
-        res.render('toughts/dashboard', {toughts})
+        let emptyTougths = false 
+
+        if(toughts.length == 0) {
+            emptyTougths = true
+        }
+
+        res.render('toughts/dashboard', {toughts, emptyTougths})
     }
     static createTought (req,res) {
         res.render('toughts/create')
@@ -52,7 +58,7 @@ module.exports = class ToughtController {
 
         try {
             await Tought.destroy({where: {id:id, UserId: UserId}})
-            
+
             req.flash('message', 'Pensamento removido com sucesso!')
 
             req.session.save(() => {

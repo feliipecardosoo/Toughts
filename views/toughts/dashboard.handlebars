@@ -4,6 +4,9 @@
         <a href="/toughts/add" class="btn">Criar Pensamento</a>
     </div>
     <h3>Seus pensamentos</h3>
+    {{#if emptyTougths}}
+    <p>Voce ainda nao tem pensamentos!</p>
+    {{else}}
     <ul>
     {{#each toughts}}
         <li>
@@ -17,5 +20,6 @@
             </span>
         </li>
     {{/each}}
+    {{/if}}
     </ul>
 </div>
